@@ -13,7 +13,14 @@ function post(root, args, context, info) {
   }, info)
 }
 
-function updateLink(root, { id, url, description }, context, info) {
+async function updateLink(root, { id, url, description }, context, info) {
+  const userId = getUserId(context)
+  const link = await context.db.query.link({ where: { id } }, ` { postedBy { id } } `)
+
+  if (link.postedBy.id !== userId) {
+    throw new Error('Current user is not author of this post')
+  }
+
   return context.db.mutation.updateLink({
     data: {
       url,
@@ -23,7 +30,14 @@ function updateLink(root, { id, url, description }, context, info) {
   }, info)
 }
 
-function deleteLink(root, { id }, context, info) {
+async function deleteLink(root, { id }, context, info) {
+  const userId = getUserId(context)
+  const link = await context.db.query.link({ where: { id } }, ` { postedBy { id } } `)
+
+  if (link.postedBy.id !== userId) {
+    throw new Error('Current user is not author of this post')
+  }
+
   return context.db.mutation.deleteLink({
     where: { id },
   }, info)
