@@ -1,38 +1,61 @@
 const { GraphQLServer } = require('graphql-yoga')
 
-const typeDefs = `
-type Query {
-  info: String!
-  feed: [Link!]!
-}
-
-type Link {
-  id: ID!
-  description: String!
-  url: String!
-}
-`
-
 let links = [{
   id: 'link-0',
   url: 'www.howtographql.com',
   description: 'Fullstack tutorial for GraphQL'
 }]
+let idCount = links.length
 
 const resolvers = {
   Query: {
     info: () => `This is the API of Hackernews Clone`,
-    feed: () => links
+    feed: () => links,
+    link: (root, args) => {
+      let { id } = args
+      let link = links.find((link) => link.id === id)
+      return link
+    }
   },
-  Link: {
-    id: (root) => root.id,
-    description: (root) => root.description,
-    url: (root) => root.url
+  Mutation: {
+    post: (root, args) => {
+      const link = {
+        id: `link-${idCount++}`,
+        description: args.description,
+        url: args.url
+      }
+      links.push(link)
+      return link
+    },
+    updateLink: (root, args) => {
+      const { id, url, description } = args
+      let linkIndex = links.findIndex(link => link.id === id)
+      if (linkIndex === -1) {
+        return null
+      }
+      links[linkIndex] = {
+        ...links[linkIndex],
+        url: url ? url : links[linkIndex].url,
+        description: description ? description : links[linkIndex].description
+      }
+
+      return links[linkIndex]
+    },
+    deleteLink: (root, args) => {
+      const { id } = args
+      let linkIndex = links.findIndex(link => link.id === id)
+      if (linkIndex === -1) {
+        return null
+      }
+      let link = { ...links[linkIndex] };
+      links.splice(linkIndex, 1);
+      return link
+    }
   }
 }
 
 const server = new GraphQLServer({
-  typeDefs,
+  typeDefs: './src/schema.graphql',
   resolvers
 })
 
