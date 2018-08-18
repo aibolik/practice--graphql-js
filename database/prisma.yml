@@ -1,0 +1,7 @@
+# The HTTP endpoint for Prisma API
+endpoint: https://eu1.prisma.sh/aibol-kussain-535939/practice--graphql-js/dev
+
+# Points to the file that holds data model
+datamodel: datamodel.graphql
+
+secret: practicegraphqlJS
