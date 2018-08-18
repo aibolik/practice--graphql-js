@@ -1,0 +1,12 @@
+{
+  "name": "hackernews-node",
+  "version": "0.0.1",
+  "description": "Practice using GraphQL with NodeJS",
+  "main": "index.js",
+  "repository": "https://github.com/aibolik/practice--graphql-js/tree/master",
+  "author": "Aibol Kussain<aibolikdev@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "graphql-yoga": "^1.16.1"
+  }
+}
