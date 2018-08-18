@@ -7,11 +7,8 @@ const resolvers = {
     feed: (root, args, context, info) => {
       return context.db.query.links({}, info)
     },
-    // TODO: update implementation
-    link: (root, args) => {
-      let { id } = args
-      let link = links.find((link) => link.id === id)
-      return link
+    link: (root, { id }, context, info) => {
+      return context.db.query.link({ where: { id } }, info)
     }
   },
   Mutation: {
@@ -23,31 +20,19 @@ const resolvers = {
         }
       }, info)
     },
-    // TODO: update implementation
-    updateLink: (root, args) => {
-      const { id, url, description } = args
-      let linkIndex = links.findIndex(link => link.id === id)
-      if (linkIndex === -1) {
-        return null
-      }
-      links[linkIndex] = {
-        ...links[linkIndex],
-        url: url ? url : links[linkIndex].url,
-        description: description ? description : links[linkIndex].description
-      }
-
-      return links[linkIndex]
+    updateLink: (root, { id, url, description }, context, info) => {
+      return context.db.mutation.updateLink({
+        data: {
+          url,
+          description
+        }, 
+        where: { id }
+      }, info)
     },
-    // TODO: update implementation
-    deleteLink: (root, args) => {
-      const { id } = args
-      let linkIndex = links.findIndex(link => link.id === id)
-      if (linkIndex === -1) {
-        return null
-      }
-      let link = { ...links[linkIndex] };
-      links.splice(linkIndex, 1);
-      return link
+    deleteLink: (root, { id }, context, info) => {
+      return context.db.mutation.deleteLink({
+        where: { id },
+      }, info)
     }
   }
 }
