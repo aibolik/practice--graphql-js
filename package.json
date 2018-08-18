@@ -8,12 +8,13 @@
   "license": "MIT",
   "scripts": {
     "playground": "graphql playground",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "prisma": "prisma"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "graphql-yoga": "^1.16.1",
     "jsonwebtoken": "^8.3.0",
-    "prisma-binding": "^2.1.4"
+    "prisma-binding": "2.1.3"
   }
 }
